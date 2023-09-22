@@ -41,7 +41,7 @@ class _HomePageState extends State<HomePage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'Name: ${Provider.of<Dog>(context, listen: false).name}',
+              'Name: ${context.watch<Dog>().name}',
               style: TextStyle(fontSize: 20),
             ),
             SizedBox(
@@ -63,7 +63,7 @@ class BreedAndAge extends StatelessWidget {
     return Column(
       children: [
         Text(
-          'Breed: ${Provider.of<Dog>(context, listen: false).breed}',
+          'Breed: ${context.select<Dog, String>((Dog dog) => dog.breed)}',
           style: TextStyle(fontSize: 20),
         ),
         SizedBox(
@@ -85,15 +85,14 @@ class Age extends StatelessWidget {
     return Column(
       children: [
         Text(
-          'Age : ${Provider.of<Dog>(context).age}',
+          'Age : ${context.select<Dog, int>((Dog dog) => dog.age)}',
           style: TextStyle(fontSize: 20),
         ),
         SizedBox(
           height: 10,
         ),
         ElevatedButton(
-            onPressed: () => Provider.of<Dog>(context, listen: false).grow(),
-            child: Text('grow up'))
+            onPressed: () => context.read<Dog>().grow(), child: Text('grow up'))
       ],
     );
   }
