@@ -54,11 +54,16 @@ class _HompageState extends State<Hompage> {
             SizedBox(
               height: 20,
             ),
-            CounterA(),
+            CounterA(
+              counter: counter,
+              increment: increment,
+            ),
             SizedBox(
               height: 20,
             ),
-            Middle()
+            Middle(
+              counter: counter,
+            )
           ],
         ),
       ),
@@ -67,7 +72,10 @@ class _HompageState extends State<Hompage> {
 }
 
 class CounterA extends StatelessWidget {
-  const CounterA({super.key});
+  final int counter;
+  final void Function() increment;
+
+  const CounterA({super.key, required this.counter, required this.increment});
 
   @override
   Widget build(BuildContext context) {
@@ -83,11 +91,11 @@ class CounterA extends StatelessWidget {
             height: 10,
           ),
           Text(
-            '0',
+            '$counter',
             style: TextStyle(fontSize: 20),
           ),
           ElevatedButton.icon(
-            onPressed: () {},
+            onPressed: increment,
             icon: Icon(Icons.plus_one_rounded),
             label: Text('Increment'),
           )
@@ -98,7 +106,9 @@ class CounterA extends StatelessWidget {
 }
 
 class Middle extends StatelessWidget {
-  const Middle({super.key});
+  final int counter;
+
+  const Middle({super.key, required this.counter});
 
   @override
   Widget build(BuildContext context) {
@@ -117,7 +127,9 @@ class Middle extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              CounterB(),
+              CounterB(
+                counter: counter,
+              ),
               SizedBox(
                 width: 10,
               ),
@@ -131,7 +143,9 @@ class Middle extends StatelessWidget {
 }
 
 class CounterB extends StatelessWidget {
-  const CounterB({super.key});
+  final int counter;
+
+  const CounterB({super.key, required this.counter});
 
   @override
   Widget build(BuildContext context) {
@@ -140,7 +154,7 @@ class CounterB extends StatelessWidget {
       decoration: BoxDecoration(
           color: Colors.blue.withOpacity(0.5),
           borderRadius: BorderRadius.circular(3)),
-      child: Text('0'),
+      child: Text('$counter'),
     );
   }
 }
