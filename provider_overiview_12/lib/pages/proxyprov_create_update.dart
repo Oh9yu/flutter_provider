@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class Translations {
-  const Translations(this._value);
-  final int _value;
+  late int _value;
+
+  void update(int newValue) {
+    _value = newValue;
+  }
 
   String get title => 'You clicked $_value times';
 }
@@ -31,14 +34,21 @@ class _ProxyProvCreateUpdateState extends State<ProxyProvCreateUpdate> {
       appBar: AppBar(
         title: Text('ProxyProvider create/update'),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ShowTranslations(),
-            SizedBox(height: 20.0),
-            IncreaseButton(increment: increment),
-          ],
+      body: ProxyProvider0<Translations>(
+        create: (_) => Translations(),
+        update: (_, Translations? translations) {
+          translations!.update(counter);
+          return translations;
+        },
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ShowTranslations(),
+              SizedBox(height: 20.0),
+              IncreaseButton(increment: increment),
+            ],
+          ),
         ),
       ),
     );
@@ -50,8 +60,9 @@ class ShowTranslations extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final title = context.watch<Translations>().title;
     return Text(
-      'You clicked 0 times',
+      title,
       style: TextStyle(fontSize: 28.0),
     );
   }
