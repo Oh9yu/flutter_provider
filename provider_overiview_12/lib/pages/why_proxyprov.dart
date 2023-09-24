@@ -53,9 +53,9 @@ class ShowTranslations extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final title = Provider.of(context).title;
+    final title = Provider.of<Translations>(context).title;
     return Text(
-      '$title',
+      title,
       style: TextStyle(fontSize: 28.0),
     );
   }
