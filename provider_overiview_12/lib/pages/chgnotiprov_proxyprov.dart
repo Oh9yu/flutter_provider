@@ -1,6 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+class Counter with ChangeNotifier {
+  int counter = 0;
+
+  void increase() {
+    counter++;
+    notifyListeners();
+  }
+}
+
 class Translations {
   const Translations(this._value);
   final int _value;
@@ -16,15 +25,6 @@ class ChgNotiProvProxyProv extends StatefulWidget {
 }
 
 class _ChgNotiProvProxyProvState extends State<ChgNotiProvProxyProv> {
-  int counter = 0;
-
-  void increment() {
-    setState(() {
-      counter++;
-      print('counter: $counter');
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,13 +32,23 @@ class _ChgNotiProvProxyProvState extends State<ChgNotiProvProxyProv> {
         title: Text('ChangeNotifierProvider ProxyProvider'),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ShowTranslations(),
-            SizedBox(height: 20.0),
-            IncreaseButton(increment: increment),
+        child: MultiProvider(
+          providers: [
+            ChangeNotifierProvider<Counter>(
+              create: (_) => Counter(),
+            ),
+            ProxyProvider<Counter, Translations>(
+              update: (_, counter, __) => Translations(counter.counter),
+            ),
           ],
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ShowTranslations(),
+              SizedBox(height: 20.0),
+              IncreaseButton(),
+            ],
+          ),
         ),
       ),
     );
@@ -50,24 +60,23 @@ class ShowTranslations extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final title = context.watch<Translations>().title;
     return Text(
-      'You clicked 0 times',
+      title,
       style: TextStyle(fontSize: 28.0),
     );
   }
 }
 
 class IncreaseButton extends StatelessWidget {
-  final VoidCallback increment;
   const IncreaseButton({
     Key? key,
-    required this.increment,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: increment,
+      onPressed: () => context.read<Counter>().increase(),
       child: Text(
         'INCREASE',
         style: TextStyle(fontSize: 20.0),
