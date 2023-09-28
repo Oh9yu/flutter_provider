@@ -32,13 +32,23 @@ class _ProxyProvProxyProvState extends State<ProxyProvProxyProv> {
         title: Text('ProxyProvider ProxyProvider'),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ShowTranslations(),
-            SizedBox(height: 20.0),
-            IncreaseButton(increment: increment),
+        child: MultiProvider(
+          providers: [
+            ProxyProvider0<int>(
+              update: (_, __) => counter,
+            ),
+            ProxyProvider<int, Translations>(
+              update: (_, value, __) => Translations(value),
+            )
           ],
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ShowTranslations(),
+              SizedBox(height: 20.0),
+              IncreaseButton(increment: increment),
+            ],
+          ),
         ),
       ),
     );
@@ -50,8 +60,9 @@ class ShowTranslations extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final title = Provider.of<Translations>(context).title;
     return Text(
-      'You clicked 0 times',
+      title,
       style: TextStyle(fontSize: 28.0),
     );
   }
