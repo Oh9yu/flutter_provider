@@ -14,4 +14,13 @@ class Todo extends Equatable {
 
   @override
   List<Object> get props => [id, desc, completed];
+
+  @override
+  bool get stringify => true;
+}
+
+enum Filter {
+  all,
+  active,
+  completed,
 }
